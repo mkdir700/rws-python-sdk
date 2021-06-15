@@ -2,12 +2,12 @@ from datetime import datetime
 
 from rws import Orders
 from config import SECRET, KEY
-from rws.models.orders import SearchOrderRequestParameter
+from rws.models.orders import GetOrderRequestParameter
 
 order = Orders(secret=SECRET, key=KEY, proxy="127.0.0.1:7890")
 startDatetime = datetime(year=2021, month=6, day=5)
 endDatetime = datetime(year=2021, month=6, day=10)
-parameter = SearchOrderRequestParameter(dateType=1, startDatetime=startDatetime, endDatetime=endDatetime)
-resp = order.search_order(parameter)
+parameter = GetOrderRequestParameter(orderNumberList=["386145-20210609-00502848"], version=5)
+resp = order.get_order(parameter)
 print(resp.text)
 # {"orderNumberList":["386145-20210609-00502848","386145-20210609-00557845","386145-20210609-00525830","386145-20210609-00538819","386145-20210609-00535816","386145-20210609-00569813","386145-20210609-00571837","386145-20210609-00535801","386145-20210609-00555847","386145-20210609-00558823","386145-20210609-00553836","386145-20210609-00529846","386145-20210609-00607820","386145-20210609-00564818","386145-20210609-00541843","386145-20210609-00525805","386145-20210609-00513829","386145-20210609-00524830","386145-20210609-00534816","386145-20210609-00528846","386145-20210609-00556812","386145-20210609-00556845","386145-20210609-00512807","386145-20210609-00555845","386145-20210609-00539806","386145-20210609-00523825","386145-20210609-00537819","386145-20210609-00512827","386145-20210609-00514840","386145-20210609-00554847"],"MessageModelList":[{"messageType":"INFO","messageCode":"ORDER_EXT_API_SEARCH_ORDER_INFO_101","message":"注文検索に成功しました。"}],"PaginationResponseModel":{"totalRecordsAmount":2424,"totalPages":81,"requestPage":1}}
