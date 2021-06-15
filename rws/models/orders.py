@@ -9,13 +9,13 @@ Created on 2021/6/15 13:03
 """
 from datetime import datetime
 from typing import List, Optional
-from pydantic import BaseModel
+from pydantic import BaseModel, validator
 
 
 class SearchOrderRequestParameter(BaseModel):
     orderProgressList: Optional[List[int]] = None
     subStatusIdList: Optional[List[int]] = None
-    dataType: int
+    dateType: int
     startDatetime: datetime
     endDatetime: datetime
     orderTypeList: Optional[List[int]] = None
@@ -36,6 +36,14 @@ class SearchOrderRequestParameter(BaseModel):
     drugFlag: Optional[int] = None
     overseasFlag: Optional[int] = None
     PaginationRequestModel: Optional["PaginationRequestDataModel"] = None
+    
+    @validator('startDatetime')
+    def valid_start_datetime(cls, v):
+        return v.strftime("%Y-%m-%dT%H:%M:%S+0900")
+
+    @validator('endDatetime')
+    def valid_end_datetime(cls, v):
+        return v.strftime("%Y-%m-%dT%H:%M:%S+0900")
 
 
 class PaginationRequestDataModel(BaseModel):
@@ -56,4 +64,4 @@ class GetOrderRequestParameter(BaseModel):
 
 class GetPaymentRequestParameter(BaseModel):
     orderNumber: str
-    version: int = 5
+    version: int = 4
