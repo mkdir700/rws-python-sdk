@@ -8,6 +8,7 @@ Created on 2021/6/15 10:09
 @email:  mkdir700@gmail.com
 """
 import base64
+import json
 
 from requests import request
 from requests.exceptions import HTTPError
@@ -25,12 +26,12 @@ class RWS(object):
     URI = '/'
     ENDPOINT = "https://api.rms.rakuten.co.jp"
     
-    def __init__(self, secret, key, proxy, uri, headers=None):
+    def __init__(self, secret, key, proxy=None, uri=None, headers=None):
         self.secret = secret
         self.key = key
         self.proxy = proxy
         self.uri = uri or self.URI
-        if headers is not None:
+        if headers is None:
             self.headers = {}
     
     def set_default_headers(self):
@@ -40,7 +41,7 @@ class RWS(object):
         """
         sign = base64.b64encode(f'{self.secret}:{self.key}'.encode()).decode()
         return {
-            'Authorization': sign,
+            'Authorization': f"ESA {sign}",
             'Content-Type': 'application/json; charset=utf-8'
         }
     
@@ -78,7 +79,7 @@ class RWS(object):
             request_args["data"] = body
             request_args["params"] = request_params
         elif method == "POST":
-            request_args["data"] = request_params
+            request_args["data"] = json.dumps(request_params)
         else:
             request_args["params"] = request_params
         
@@ -96,7 +97,7 @@ class RWS(object):
         if self.proxy:
             proxies = {
                 "http": "http://{}".format(self.proxy),
-                "https": "https://{}".format(self.proxy),
+                "https": "http://{}".format(self.proxy),
             }
         return proxies
     
