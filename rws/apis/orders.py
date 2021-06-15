@@ -19,7 +19,7 @@ class Orders(RWS):
     """
     Rakuten Orders API
     """
-    URI = "/es/2.0/order"
+    URI = "/es/2.0/order/"
     
     def search_order(self, params: SearchOrderRequestParameter):
         """
@@ -43,4 +43,4 @@ class Orders(RWS):
         :return:
         """
         data = params.dict()
-        return self.make_request("getOrder", data)
+        return self.make_request("getPayment", data)
